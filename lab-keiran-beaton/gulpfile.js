@@ -1,37 +1,26 @@
 'use strict';
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
-const mocha = require('gulp-mocha');
 const nodemon = require('gulp-nodemon');
 
-let scripts = ['./server.js', './lib/*.js', './test/*.js', './model/*.js', './route/*.js', './routes/*.js'];
-let testFiles = ['./test/*.js'];
+let scripts = ['./server.js', './lib/*.js', './model/*.js', './route/*.js'];
 gulp.task('lint', () => {
-  gulp.src(scripts)
-    .pipe(eslint({
-      rules: {
-        'indent': [2,2]
-      },
-      envs: [
-        'node',
-        'es6'
-      ]
-    }))
-    .pipe(eslint.format());
+  return gulp.src(['**/*.js', '!node_modules/**'])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
-gulp.task('test', () => {
-  return gulp.src(testFiles)
-    .pipe(mocha({reporter: 'spec'}));
-});
+
 gulp.task('start', () => {
   nodemon({
-    script: scripts,
+    script: 'server.js',
     ext: 'js',
     env: {'NODE_ENV': 'development'}
   });
 });
+
 gulp.task('watch', () => {
   gulp.watch(scripts, ['start']);
 });
 
-gulp.task('default', ['start', 'watch', 'lint', 'test']);
+gulp.task('default', ['start', 'watch', 'lint']);

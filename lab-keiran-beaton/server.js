@@ -7,8 +7,11 @@ mongoose.connect('mongodb://localhost:auth_dev');
 let app = require('express')();
 let serverError = require('debug')('cflab:error');
 let authRouter = require('./route/authRouter');
+let friendRouter = require('./route/friendRouter');
+let port = 3000;
 
 app.use('/api', authRouter);
+app.use('/api/friend', friendRouter);
 
 app.use((err, req, res, next) => {
   serverError(err);
