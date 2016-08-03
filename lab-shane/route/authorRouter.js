@@ -5,6 +5,8 @@ const jsonParser = require('body-parser').json();
 const AuthorModel = require('../model/authorModel.js');
 const AppError = require('../lib/app_error.js');
 const authorBookRouter = require('./authorBookRouter.js');
+const jwt_magic = require('../lib/jwt_magic.js');
+const authorize = require('../lib/authorize.js');
 
 let authorRouter = module.exports = exports = new Router();
 
@@ -27,7 +29,7 @@ authorRouter.get('/:name', (req, res) => {
   });
 });
 
-authorRouter.post('/', jsonParser, (req, res) => {
+authorRouter.post('/', jsonParser, jwt_magic, authorize(), (req, res) => {
   if (!req.body.name) {
     return res.sendError(AppError.error400('No data inputted.'));
   }
@@ -43,7 +45,7 @@ authorRouter.post('/', jsonParser, (req, res) => {
   });
 });
 
-authorRouter.put('/:name', jsonParser, (req, res) => {
+authorRouter.put('/:name', jsonParser, authorize(), (req, res) => {
   let name = req.params.name;
   if (!req.body.name) {
     return res.sendError(AppError.error400('No data inputted for author ' + req.params.name + '.'));
@@ -61,7 +63,7 @@ authorRouter.put('/:name', jsonParser, (req, res) => {
   });
 });
 
-authorRouter.delete('/:name', (req, res) => {
+authorRouter.delete('/:name', authorize(), (req, res) => {
   let name = req.params.name;
   AuthorModel.findOne({name: name}, (err, p) => {
     if (p != null) {

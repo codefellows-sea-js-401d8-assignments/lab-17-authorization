@@ -4,6 +4,7 @@ const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const BookModel = require('../model/bookModel.js');
 const AppError = require('../lib/app_error.js');
+const authorize = require('../lib/authorize.js');
 
 let bookRouter = module.exports = exports = new Router();
 
@@ -19,7 +20,7 @@ bookRouter.get('/:_id', (req, res) => {
   });
 });
 
-bookRouter.post('/', jsonParser, (req, res) => {
+bookRouter.post('/', jsonParser, authorize(), (req, res) => {
   if (!req.body.name) {
     return res.sendError(AppError.error400('No data inputted.'));
   }
@@ -35,7 +36,7 @@ bookRouter.post('/', jsonParser, (req, res) => {
   });
 });
 
-bookRouter.put('/:name', jsonParser, (req, res) => {
+bookRouter.put('/:name', jsonParser, authorize(), (req, res) => {
   let name = req.params.name;
   if (!req.body.name) {
     return res.sendError(AppError.error400('No data inputted for book ' + req.params.name + '.'));
@@ -53,7 +54,7 @@ bookRouter.put('/:name', jsonParser, (req, res) => {
   });
 });
 
-bookRouter.delete('/:name', (req, res) => {
+bookRouter.delete('/:name', authorize(), (req, res) => {
   let name = req.params.name;
   BookModel.findOne({name: name}, (err, p) => {
     if (p != null) {

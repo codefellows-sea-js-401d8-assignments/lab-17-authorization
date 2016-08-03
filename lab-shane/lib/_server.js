@@ -2,6 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
+mongoose.promise = Promise;
 const fs = require('fs');
 const morgan = require('morgan');
 const authorServer = 'mongodb://localhost/author';

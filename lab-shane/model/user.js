@@ -11,6 +11,9 @@ const userSchema = new Schema({
   basic: {
     email: {type: String, require: true, unique: true},
     password: {type: String, require: true}
+  },
+  role:{
+    type:String, require:true, default:'basic'
   }
 });
 
@@ -20,9 +23,7 @@ userSchema.methods.createHash = function(password) {
       if (err) return reject(err);
       this.basic.password = data;
       resolve({
-        token: jwt.sign({
-          idd: this.basic.email
-        }, process.env.APP_SECRET)
+        token: jwt.sign({idd: this.basic.email}, process.env.APP_SECRET)
       });
     });
   });
