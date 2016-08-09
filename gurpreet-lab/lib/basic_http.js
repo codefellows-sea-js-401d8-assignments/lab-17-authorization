@@ -7,7 +7,10 @@ module.exports = exports = function(req, res, next) {
     let authBuffer = new Buffer(basicString, 'base64');
     let authString = authBuffer.toString();
     let authArr = authString.split(':');
-    req.auth = {username: authArr[0], password: authArr[1]};
+    req.auth = {
+      username: authArr[0],
+      password: authArr[1]
+    };
     authBuffer.fill(0);
     next();
   } catch(e) {
