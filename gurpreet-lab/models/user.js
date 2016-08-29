@@ -23,13 +23,10 @@ userSchema.methods.generateHash = function(password) {
 };
 
 userSchema.methods.comparePassword = function(password) {
-  debugger;
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, this.basic.password, (err, data) => {
-      debugger;
       if (err) return reject(err);
       if (data === false) return reject(new Error('Password did not match'));
-      debugger;
       resolve({token: jwt.sign({idd: this.basic.email}, process.env.APP_SECRET)});
     });
   });
