@@ -12,6 +12,7 @@ module.exports = exports = function(req, res, next) {
       password: authArr[1]
     };
     authBuffer.fill(0);
+    debugger;
     next();
   } catch(e) {
     e.statusCode = 400;
